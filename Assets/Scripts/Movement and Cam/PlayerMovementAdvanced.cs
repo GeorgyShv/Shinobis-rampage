@@ -155,11 +155,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         // Mode - Wallrunning
-        if (wallrunning)
+        else if (wallrunning)
         {
             state = MovementState.wallrunning;
             desiredMoveSpeed = wallrunSpeed;
         }
+
         // Mode - Sliding
         else if (sliding)
         {
@@ -238,9 +239,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
         float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
 
+        float boostFactor = dashSpeedChangeFactor;
+
         while (time < difference)
         {
             moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+
+            time += Time.deltaTime * boostFactor;
 
             if (OnSlope())
             {
@@ -256,6 +261,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         moveSpeed = desiredMoveSpeed;
+        dashSpeedChangeFactor = 1f;
+        keepMomentum = false;
     }
 
     private void MovePlayer()

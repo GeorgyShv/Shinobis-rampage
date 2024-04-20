@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dashing : MonoBehaviour
 {
-    [Header("Refernces")]
+    [Header("References")]
     public Transform orientation;
     public Transform playerCam;
     private Rigidbody rb;
@@ -13,12 +13,7 @@ public class Dashing : MonoBehaviour
     [Header("Dashing")]
     public float dashForce;
     public float dashUpwardForce;
-    public float maxDashYSpeed;
     public float dashDuration;
-
-    [Header("CameraEffects")]
-    public PlayerCam cam;
-    public float dashFov;
 
     [Header("Settings")]
     public bool useCameraForward = true;
@@ -37,7 +32,6 @@ public class Dashing : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovementAdvanced>();
-
     }
 
     private void Update()
@@ -51,20 +45,18 @@ public class Dashing : MonoBehaviour
 
     private void Dash()
     {
-        if (dashCdTimer > 0) return;
-        else dashCdTimer = dashCd;
+        if (dashCdTimer > 0)
+            return;
+        else
+            dashCdTimer = dashCd;
 
         pm.dashing = true;
-        pm.maxYSpeed = maxDashYSpeed;
-
-        cam.DoFov(dashFov);
 
         Transform forwardT;
-
         if (useCameraForward)
-            forwardT = playerCam; /// where you're looking
+            forwardT = playerCam;
         else
-            forwardT = orientation; /// where you're facing (no up or down)
+            forwardT = orientation;
 
         Vector3 direction = GetDirection(forwardT);
 
@@ -84,16 +76,12 @@ public class Dashing : MonoBehaviour
     {
         if (resetVel)
             rb.velocity = Vector3.zero;
-
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
 
     private void ResetDash()
     {
         pm.dashing = false;
-        pm.maxYSpeed = 0;
-
-        cam.DoFov(85f);
 
         if (disableGravity)
             rb.useGravity = true;

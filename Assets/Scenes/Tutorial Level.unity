@@ -29186,11 +29186,8 @@ MonoBehaviour:
   orientation: {fileID: 8904925348503853384}
   playerCam: {fileID: 634600851864598321}
   dashForce: 30
-  dashUpwardForce: 1
-  maxDashYSpeed: 3
-  dashDuration: 0.25
-  cam: {fileID: 2421984510261385373}
-  dashFov: 85
+  dashUpwardForce: 0
+  dashDuration: 0.2
   useCameraForward: 0
   allowAllDirections: 1
   disableGravity: 1
@@ -29257,8 +29254,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxSlopeAngle: 40
-  dashSpeed: 20
-  dashSpeedChangeFactor: 50
+  dashSpeed: 10
+  dashSpeedChangeFactor: 10
   orientation: {fileID: 8904925348503853384}
   state: 0
   dashing: 0
