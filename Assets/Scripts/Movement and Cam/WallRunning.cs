@@ -178,7 +178,7 @@ public class WallRunning : MonoBehaviour
 
         Vector3 wallNormal = wallRight ? rightWallhit.normal : leftWallhit.normal;
 
-        Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce + orientation.forward * 10f;
+        Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce + orientation.forward * 12f;
         //Vector3 forceForward = orientation.forward * 10f;
         //Vector3 forwardForce = transform.forward * 150f;
 

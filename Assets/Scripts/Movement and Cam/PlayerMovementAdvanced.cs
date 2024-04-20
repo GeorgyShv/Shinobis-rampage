@@ -147,12 +147,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void StateHandler()
     {
         // Mode - Dashing
-        //if (dashing)
-        //{
-        //    state = MovementState.dashing;
-        //    desiredMoveSpeed = dashSpeed;
-        //    dashSpeedChangeFactor = dashSpeed;
-        //}
+        if (dashing)
+        {
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
+            dashSpeedChangeFactor = dashSpeed;
+        }
 
         // Mode - Wallrunning
         if (wallrunning)
