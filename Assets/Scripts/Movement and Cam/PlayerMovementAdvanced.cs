@@ -92,7 +92,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.05f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
@@ -109,6 +109,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        ClimbOverWall();
     }
 
     private void MyInput()
@@ -292,6 +293,33 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         // turn gravity off while on slope
         rb.useGravity = !OnSlope();
+    }
+
+    private void ClimbOverWall()
+    {
+        if (Input.GetKey(jumpKey) && Physics.Raycast(new Vector3(orientation.transform.position.x, orientation.transform.position.y - (playerHeight / 2) + 0.1f, orientation.transform.position.z), orientation.transform.forward, out var firstHit, 0.6f, whatIsGround))
+        {
+            //Debug.Log("Около стены");
+            if (Physics.Raycast(firstHit.point + (orientation.transform.forward) + (Vector3.up * 0.5f * playerHeight), Vector3.down, out var secondHit, playerHeight / 2, whatIsGround))
+            {
+                //Debug.Log("Можно перелезть. Первая точка " + firstHit.point + " вторая точка " + secondHit.point);
+                StartCoroutine(LerpWall(secondHit.point, 0.5f));
+            }
+        }
+    }
+
+    IEnumerator LerpWall(Vector3 targetPosition, float duration)
+    {
+        float time = 0;
+        Vector3 startPosition = transform.position;
+
+        while (time < duration)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
     }
 
     private void SpeedControl()
