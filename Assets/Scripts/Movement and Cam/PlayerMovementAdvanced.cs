@@ -72,12 +72,14 @@ public class PlayerMovementAdvanced : MonoBehaviour
         crouching,
         sliding,
         dashing,
+        climbingOverWall,
         air
     }
 
     public bool dashing;
     public bool sliding;
     public bool wallrunning;
+    public bool climbingOverWall;
 
     private void Start()
     {
@@ -153,6 +155,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             dashSpeedChangeFactor = dashSpeed;
+        }
+
+        // Mode - Climb over wall
+        else if (climbingOverWall)
+        {
+            state = MovementState.climbingOverWall;
         }
 
         // Mode - Wallrunning
@@ -297,13 +305,14 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void ClimbOverWall()
     {
-        if (Input.GetKey(jumpKey) && Physics.Raycast(new Vector3(orientation.transform.position.x, orientation.transform.position.y - (playerHeight / 2) + 0.1f, orientation.transform.position.z), orientation.transform.forward, out var firstHit, 0.6f, whatIsGround))
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(jumpKey) && Physics.Raycast(new Vector3(orientation.transform.position.x, orientation.transform.position.y - (playerHeight / 2) + 0.1f, orientation.transform.position.z), orientation.transform.forward, out var firstHit, 0.6f, whatIsGround))
         {
             //Debug.Log("Около стены");
             if (Physics.Raycast(firstHit.point + (orientation.transform.forward) + (Vector3.up * 0.5f * playerHeight), Vector3.down, out var secondHit, playerHeight / 2, whatIsGround))
             {
                 //Debug.Log("Можно перелезть. Первая точка " + firstHit.point + " вторая точка " + secondHit.point);
-                StartCoroutine(LerpWall(secondHit.point, 0.5f));
+                climbingOverWall = true;
+                StartCoroutine(LerpWall(secondHit.point + (Vector3.up * 1.2f), 0.5f));
             }
         }
     }
@@ -319,7 +328,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+
         transform.position = targetPosition;
+        climbingOverWall = false;
     }
 
     private void SpeedControl()
